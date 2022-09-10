@@ -1,5 +1,7 @@
 // This class represents all the data
 // which defines a spaceship.
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:hive/hive.dart';
 
 part 'spaceship_details.g.dart';

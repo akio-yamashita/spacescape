@@ -1,27 +1,25 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/parallax.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/overlays/pause_menu.dart';
-import '../widgets/overlays/pause_button.dart';
-import '../widgets/overlays/game_over_menu.dart';
-
 import '../models/player_data.dart';
 import '../models/spaceship_details.dart';
-
-import 'enemy.dart';
-import 'health_bar.dart';
-import 'player.dart';
+import '../widgets/overlays/game_over_menu.dart';
+import '../widgets/overlays/pause_button.dart';
+import '../widgets/overlays/pause_menu.dart';
+import 'audio_player_component.dart';
 import 'bullet.dart';
 import 'command.dart';
-import 'power_ups.dart';
+import 'enemy.dart';
 import 'enemy_manager.dart';
+import 'health_bar.dart';
+import 'player.dart';
 import 'power_up_manager.dart';
-import 'audio_player_component.dart';
+import 'power_ups.dart';
 
 // This class is responsible for initializing and running the game-loop.
 class SpacescapeGame extends FlameGame
@@ -177,11 +175,12 @@ class SpacescapeGame extends FlameGame
 
       // Anchor to top right as we want the top right
       // corner of this component to be at a specific position.
-      _playerHealth.anchor = Anchor.topRight;
+      _playerHealth
+        ..anchor = Anchor.topRight
 
-      // Setting positionType to viewport makes sure that this component
-      // does not get affected by camera's transformations.
-      _playerHealth.positionType = PositionType.viewport;
+        // Setting positionType to viewport makes sure that this component
+        // does not get affected by camera's transformations.
+        ..positionType = PositionType.viewport;
 
       add(_playerHealth);
 
@@ -205,7 +204,8 @@ class SpacescapeGame extends FlameGame
   @override
   void onAttach() {
     if (buildContext != null) {
-      // Get the PlayerData from current build context without registering a listener.
+      // Get the PlayerData from current build context
+      // without registering a listener.
       final playerData = Provider.of<PlayerData>(buildContext!, listen: false);
       // Update the current spaceship type of player.
       _player.setSpaceshipType(playerData.spaceshipType);
@@ -256,15 +256,17 @@ class SpacescapeGame extends FlameGame
     // method of Command is no-op if the command is
     // not valid for given component.
     for (var command in _commandList) {
-      for (var component in children) {
-        command.run(component);
-      }
+      children.forEach(command.run);
+      // for (var component in children) {
+      //   command.run(component);
+      // }
     }
 
     // Remove all the commands that are processed and
     // add all new commands to be processed in next update.
-    _commandList.clear();
-    _commandList.addAll(_addLaterCommandList);
+    _commandList
+      ..clear()
+      ..addAll(_addLaterCommandList);
     _addLaterCommandList.clear();
 
     if (_player.isMounted) {
@@ -276,8 +278,9 @@ class SpacescapeGame extends FlameGame
       /// zero and camera stops shaking.
       if (_player.health <= 0 && (!camera.shaking)) {
         pauseEngine();
-        overlays.remove(PauseButton.id);
-        overlays.add(GameOverMenu.id);
+        overlays
+          ..remove(PauseButton.id)
+          ..add(GameOverMenu.id);
       }
     }
   }
@@ -294,8 +297,9 @@ class SpacescapeGame extends FlameGame
       case AppLifecycleState.detached:
         if (_player.health > 0) {
           pauseEngine();
-          overlays.remove(PauseButton.id);
-          overlays.add(PauseMenu.id);
+          overlays
+            ..remove(PauseButton.id)
+            ..add(PauseMenu.id);
         }
         break;
     }

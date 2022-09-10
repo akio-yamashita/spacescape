@@ -1,8 +1,8 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:spacescape/widgets/overlays/game_over_menu.dart';
 
 import '../game/game.dart';
+import '../widgets/overlays/game_over_menu.dart';
 import '../widgets/overlays/pause_button.dart';
 import '../widgets/overlays/pause_menu.dart';
 

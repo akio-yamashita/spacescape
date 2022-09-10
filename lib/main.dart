@@ -1,12 +1,12 @@
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'models/settings.dart';
-import 'screens/main_menu.dart';
 import 'models/player_data.dart';
+import 'models/settings.dart';
 import 'models/spaceship_details.dart';
+import 'screens/main_menu.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,9 +69,10 @@ Future<void> main() async {
 Future<void> initHive() async {
   await Hive.initFlutter();
 
-  Hive.registerAdapter(PlayerDataAdapter());
-  Hive.registerAdapter(SpaceshipTypeAdapter());
-  Hive.registerAdapter(SettingsAdapter());
+  Hive
+    ..registerAdapter(PlayerDataAdapter())
+    ..registerAdapter(SpaceshipTypeAdapter())
+    ..registerAdapter(SettingsAdapter());
 }
 
 /// This function reads the stored [PlayerData] from disk.
@@ -103,8 +104,10 @@ Future<Settings> getSettings() async {
   // of the game. In such case, we first store the default
   // settings in the settings box and then return the same.
   if (settings == null) {
-    box.put(Settings.settingsKey,
-        Settings(soundEffects: true, backgroundMusic: true));
+    box.put(
+      Settings.settingsKey,
+      Settings(soundEffects: true, backgroundMusic: true),
+    );
   }
 
   return box.get(Settings.settingsKey)!;

@@ -1,21 +1,22 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:math';
 
 import 'package:flame/collisions.dart';
-import 'package:flame/particles.dart';
 import 'package:flame/components.dart';
+import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../models/player_data.dart';
 import '../models/spaceship_details.dart';
-
-import 'game.dart';
-import 'enemy.dart';
+import 'audio_player_component.dart';
 import 'bullet.dart';
 import 'command.dart';
+import 'enemy.dart';
+import 'game.dart';
 import 'knows_game_size.dart';
-import 'audio_player_component.dart';
 
 // This component class represents the player character in game.
 class Player extends SpriteComponent
@@ -68,9 +69,12 @@ class Player extends SpriteComponent
         super(sprite: sprite, position: position, size: size) {
     // Sets power up timer to 4 seconds. After 4 seconds,
     // multiple bullet will get deactivated.
-    _powerUpTimer = Timer(4, onTick: () {
-      _shootMultipleBullets = false;
-    });
+    _powerUpTimer = Timer(
+      4,
+      onTick: () {
+        _shootMultipleBullets = false;
+      },
+    );
   }
 
   @override
@@ -121,7 +125,9 @@ class Player extends SpriteComponent
     // the set will be empty and our vector non-zero.
     keyboardDelta.setZero();
 
-    if (!_keysWatched.contains(event.logicalKey)) return true;
+    if (!_keysWatched.contains(event.logicalKey)) {
+      return true;
+    }
 
     if (event is RawKeyDownEvent &&
         !event.repeat &&
@@ -180,7 +186,7 @@ class Player extends SpriteComponent
         generator: (i) => AcceleratedParticle(
           acceleration: getRandomVector(),
           speed: getRandomVector(),
-          position: (position.clone() + Vector2(0, size.y / 3)),
+          position: position.clone() + Vector2(0, size.y / 3),
           child: CircleParticle(
             radius: 1,
             paint: Paint()..color = Colors.white,
@@ -193,35 +199,40 @@ class Player extends SpriteComponent
   }
 
   void joystickAction() {
-    Bullet bullet = Bullet(
+    final bullet = Bullet(
       sprite: gameRef.spriteSheet.getSpriteById(28),
       size: Vector2(64, 64),
       position: position.clone(),
       level: _spaceship.level,
-    );
+    )
 
-    // Anchor it to center and add to game world.
-    bullet.anchor = Anchor.center;
-    gameRef.add(bullet);
+      // Anchor it to center and add to game world.
+      ..anchor = Anchor.center;
+    gameRef
+      ..add(bullet)
 
-    // Ask audio player to play bullet fire effect.
-    gameRef.addCommand(Command<AudioPlayerComponent>(action: (audioPlayer) {
-      audioPlayer.playSfx('laserSmall_001.ogg');
-    }));
+      // Ask audio player to play bullet fire effect.
+      ..addCommand(
+        Command<AudioPlayerComponent>(
+          action: (audioPlayer) {
+            audioPlayer.playSfx('laserSmall_001.ogg');
+          },
+        ),
+      );
 
     // If multiple bullet is on, add two more
     // bullets rotated +-PI/6 radians to first bullet.
     if (_shootMultipleBullets) {
-      for (int i = -1; i < 2; i += 2) {
-        Bullet bullet = Bullet(
+      for (var i = -1; i < 2; i += 2) {
+        final bullet = Bullet(
           sprite: gameRef.spriteSheet.getSpriteById(28),
           size: Vector2(64, 64),
           position: position.clone(),
           level: _spaceship.level,
-        );
+        )
 
-        // Anchor it to center and add to game world.
-        bullet.anchor = Anchor.center;
+          // Anchor it to center and add to game world.
+          ..anchor = Anchor.center;
         bullet.direction.rotate(i * pi / 6);
         gameRef.add(bullet);
       }
@@ -231,11 +242,12 @@ class Player extends SpriteComponent
   // Adds given points to player score
   /// and also add it to [PlayerData.money].
   void addToScore(int points) {
-    _playerData.currentScore += points;
-    _playerData.money += points;
+    _playerData
+      ..currentScore += points
+      ..money += points
 
-    // Saves player data to disk.
-    _playerData.save();
+      // Saves player data to disk.
+      ..save();
   }
 
   // Increases health by give amount.
@@ -259,7 +271,7 @@ class Player extends SpriteComponent
   // This method also takes care of updating the internal spaceship details
   // as well as the spaceship sprite.
   void setSpaceshipType(SpaceshipType spaceshipType) {
-    spaceshipType = spaceshipType;
+    this.spaceshipType = spaceshipType;
     _spaceship = Spaceship.getSpaceshipByType(spaceshipType);
     sprite = gameRef.spriteSheet.getSpriteById(_spaceship.spriteId);
   }
@@ -267,7 +279,8 @@ class Player extends SpriteComponent
   // Allows player to first multiple bullets for 4 seconds when called.
   void shootMultipleBullets() {
     _shootMultipleBullets = true;
-    _powerUpTimer.stop();
-    _powerUpTimer.start();
+    _powerUpTimer
+      ..stop()
+      ..start();
   }
 }

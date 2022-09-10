@@ -19,15 +19,15 @@ class GameOverMenu extends StatelessWidget {
         children: [
           // Pause menu title.
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 50.0),
+            padding: EdgeInsets.symmetric(vertical: 50),
             child: Text(
               'Game Over',
               style: TextStyle(
-                fontSize: 50.0,
+                fontSize: 50,
                 color: Colors.black,
                 shadows: [
                   Shadow(
-                    blurRadius: 20.0,
+                    blurRadius: 20,
                     color: Colors.white,
                     offset: Offset(0, 0),
                   )
@@ -43,8 +43,9 @@ class GameOverMenu extends StatelessWidget {
               onPressed: () {
                 gameRef.overlays.remove(GameOverMenu.id);
                 gameRef.overlays.add(PauseButton.id);
-                gameRef.reset();
-                gameRef.resumeEngine();
+                gameRef
+                  ..reset()
+                  ..resumeEngine();
               },
               child: const Text('Restart'),
             ),
@@ -59,7 +60,7 @@ class GameOverMenu extends StatelessWidget {
                 gameRef.reset();
 
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (context) => const MainMenu(),
                   ),
                 );

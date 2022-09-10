@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../models/player_data.dart';
 import '../models/spaceship_details.dart';
-
 import 'game_play.dart';
 import 'main_menu.dart';
 
@@ -22,15 +21,15 @@ class SelectSpaceship extends StatelessWidget {
           children: [
             // Game title.
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 50.0),
+              padding: EdgeInsets.symmetric(vertical: 50),
               child: Text(
                 'Select',
                 style: TextStyle(
-                  fontSize: 50.0,
+                  fontSize: 50,
                   color: Colors.black,
                   shadows: [
                     Shadow(
-                      blurRadius: 20.0,
+                      blurRadius: 20,
                       color: Colors.white,
                       offset: Offset(0, 0),
                     )
@@ -90,7 +89,7 @@ class SelectSpaceship extends StatelessWidget {
                                       } else {
                                         // Displays an alert if player
                                         // does not have enough money.
-                                        showDialog(
+                                        showDialog<void>(
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
@@ -100,6 +99,7 @@ class SelectSpaceship extends StatelessWidget {
                                                 textAlign: TextAlign.center,
                                               ),
                                               content: Text(
+                                                // ignore: lines_longer_than_80_chars
                                                 'Need ${spaceship.cost - playerData.money} more',
                                                 textAlign: TextAlign.center,
                                               ),
@@ -133,7 +133,7 @@ class SelectSpaceship extends StatelessWidget {
                   // Push and replace current screen (i.e MainMenu) with
                   // GamePlay, because back press will be blocked by GamePlay.
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
+                    MaterialPageRoute<void>(
                       builder: (context) => const GamePlay(),
                     ),
                   );
@@ -148,7 +148,7 @@ class SelectSpaceship extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
+                    MaterialPageRoute<void>(
                       builder: (context) => const MainMenu(),
                     ),
                   );

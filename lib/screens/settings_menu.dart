@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spacescape/models/settings.dart';
+
+import '../models/settings.dart';
 
 // This class represents the settings menu.
 class SettingsMenu extends StatelessWidget {
@@ -15,15 +16,15 @@ class SettingsMenu extends StatelessWidget {
           children: [
             // Game title.
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 50.0),
+              padding: EdgeInsets.symmetric(vertical: 50),
               child: Text(
                 'Settings',
                 style: TextStyle(
-                  fontSize: 50.0,
+                  fontSize: 50,
                   color: Colors.black,
                   shadows: [
                     Shadow(
-                      blurRadius: 20.0,
+                      blurRadius: 20,
                       color: Colors.white,
                       offset: Offset(0, 0),
                     )

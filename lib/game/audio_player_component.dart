@@ -2,9 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:provider/provider.dart';
 
-import 'game.dart';
-
 import '../models/settings.dart';
+import 'game.dart';
 
 class AudioPlayerComponent extends Component with HasGameRef<SpacescapeGame> {
   @override
@@ -20,16 +19,20 @@ class AudioPlayerComponent extends Component with HasGameRef<SpacescapeGame> {
       );
     } catch (_) {
       // ignore: avoid_print
-      print('Missing VOiD1 Gaming music pack: '
-          'https://void1gaming.itch.io/free-synthwave-music-pack '
-          'See assets/audio/README.md for more information.');
+      print(
+        'Missing VOiD1 Gaming music pack: '
+        'https://void1gaming.itch.io/free-synthwave-music-pack '
+        'See assets/audio/README.md for more information.',
+      );
     }
 
     return super.onLoad();
   }
 
   void playBgm(String filename) {
-    if (!FlameAudio.audioCache.loadedFiles.containsKey(filename)) return;
+    if (!FlameAudio.audioCache.loadedFiles.containsKey(filename)) {
+      return;
+    }
 
     if (gameRef.buildContext != null) {
       if (Provider.of<Settings>(gameRef.buildContext!, listen: false)

@@ -1,5 +1,7 @@
-import 'package:hive/hive.dart';
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import 'spaceship_details.dart';
 
@@ -82,12 +84,12 @@ class PlayerData extends ChangeNotifier with HiveObjectMixin {
 
   /// Returns true if player has enough money to by given [SpaceshipType].
   bool canBuy(SpaceshipType spaceshipType) {
-    return (money >= Spaceship.getSpaceshipByType(spaceshipType).cost);
+    return money >= Spaceship.getSpaceshipByType(spaceshipType).cost;
   }
 
   /// Returns true if player's current spaceship type is same as given [SpaceshipType].
   bool isEquipped(SpaceshipType spaceshipType) {
-    return (this.spaceshipType == spaceshipType);
+    return this.spaceshipType == spaceshipType;
   }
 
   /// Buys the given [SpaceshipType] if player has enough money and does not already own it.

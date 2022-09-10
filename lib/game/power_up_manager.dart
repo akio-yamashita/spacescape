@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flame/components.dart';
 
 import 'game.dart';
-import 'power_ups.dart';
 import 'knows_game_size.dart';
+import 'power_ups.dart';
 
 typedef PowerUpMap
     = Map<PowerUpTypes, PowerUp Function(Vector2 position, Vector2 size)>;
@@ -59,35 +59,39 @@ class PowerUpManager extends Component
 
     // Restarts the spawn timer after 2 seconds are
     // elapsed from start of freeze timer.
-    _freezeTimer = Timer(2, onTick: () {
-      _spawnTimer.start();
-    });
+    _freezeTimer = Timer(
+      2,
+      onTick: () {
+        _spawnTimer.start();
+      },
+    );
   }
 
   // This method is responsible for generating a
   // random power up at random location on the screen.
   void _spawnPowerUp() {
-    Vector2 initialSize = Vector2(64, 64);
-    Vector2 position = Vector2(
+    final initialSize = Vector2(64, 64);
+    final position = Vector2(
       random.nextDouble() * gameRef.size.x,
       random.nextDouble() * gameRef.size.y,
-    );
+    )
 
-    // Clamp so that the power up does not
-    // go outside the screen.
-    position.clamp(
-      Vector2.zero() + initialSize / 2,
-      gameRef.size - initialSize / 2,
-    );
+      // Clamp so that the power up does not
+      // go outside the screen.
+      ..clamp(
+        Vector2.zero() + initialSize / 2,
+        gameRef.size - initialSize / 2,
+      );
 
     // Returns a random integer from 0 to (PowerUpTypes.values.length - 1).
-    int randomIndex = random.nextInt(PowerUpTypes.values.length);
+    final randomIndex = random.nextInt(PowerUpTypes.values.length);
 
-    // Tried to get the generator function corresponding to selected random power.
+    // Tried to get the generator function corresponding to
+    // selected random power.
     final fn = _powerUpMap[PowerUpTypes.values.elementAt(randomIndex)];
 
     // If the generator function is valid call it and get the power up.
-    var powerUp = fn?.call(position, initialSize);
+    final powerUp = fn?.call(position, initialSize);
 
     // If power up is valid, set anchor to center.
     powerUp?.anchor = Anchor.center;
@@ -128,8 +132,9 @@ class PowerUpManager extends Component
   // This method gets called when the game is being restarted.
   void reset() {
     // Stop all the timers.
-    _spawnTimer.stop();
-    _spawnTimer.start();
+    _spawnTimer
+      ..stop()
+      ..start();
   }
 
   // This method gets called when freeze power is activated.
@@ -138,7 +143,8 @@ class PowerUpManager extends Component
     _spawnTimer.stop();
 
     // Restart the freeze timer.
-    _freezeTimer.stop();
-    _freezeTimer.start();
+    _freezeTimer
+      ..stop()
+      ..start();
   }
 }

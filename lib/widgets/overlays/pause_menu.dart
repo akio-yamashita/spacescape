@@ -19,15 +19,15 @@ class PauseMenu extends StatelessWidget {
         children: [
           // Pause menu title.
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 50.0),
+            padding: EdgeInsets.symmetric(vertical: 50),
             child: Text(
               'Paused',
               style: TextStyle(
-                fontSize: 50.0,
+                fontSize: 50,
                 color: Colors.black,
                 shadows: [
                   Shadow(
-                    blurRadius: 20.0,
+                    blurRadius: 20,
                     color: Colors.white,
                     offset: Offset(0, 0),
                   )
@@ -56,8 +56,9 @@ class PauseMenu extends StatelessWidget {
               onPressed: () {
                 gameRef.overlays.remove(PauseMenu.id);
                 gameRef.overlays.add(PauseButton.id);
-                gameRef.reset();
-                gameRef.resumeEngine();
+                gameRef
+                  ..reset()
+                  ..resumeEngine();
               },
               child: const Text('Restart'),
             ),
@@ -69,11 +70,12 @@ class PauseMenu extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 gameRef.overlays.remove(PauseMenu.id);
-                gameRef.reset();
-                gameRef.resumeEngine();
+                gameRef
+                  ..reset()
+                  ..resumeEngine();
 
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (context) => const MainMenu(),
                   ),
                 );

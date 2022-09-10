@@ -1,18 +1,17 @@
 import 'dart:math';
 
 import 'package:flame/collisions.dart';
-import 'package:flame/particles.dart';
 import 'package:flame/components.dart';
+import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 
-import 'game.dart';
-import 'bullet.dart';
-import 'player.dart';
-import 'command.dart';
-import 'knows_game_size.dart';
-import 'audio_player_component.dart';
-
 import '../models/enemy_data.dart';
+import 'audio_player_component.dart';
+import 'bullet.dart';
+import 'command.dart';
+import 'game.dart';
+import 'knows_game_size.dart';
+import 'player.dart';
 
 // This class represent an enemy component.
 class Enemy extends SpriteComponent
@@ -78,9 +77,12 @@ class Enemy extends SpriteComponent
     _hpText.text = '$_hitPoints HP';
 
     // Sets freeze time to 2 seconds. After 2 seconds speed will be reset.
-    _freezeTimer = Timer(2, onTick: () {
-      _speed = enemyData.speed;
-    });
+    _freezeTimer = Timer(
+      2,
+      onTick: () {
+        _speed = enemyData.speed;
+      },
+    );
 
     // If this enemy can move horizontally, randomize the move direction.
     if (enemyData.hMove) {
@@ -105,10 +107,11 @@ class Enemy extends SpriteComponent
     // As current component is already rotated by pi radians,
     // the text component needs to be again rotated by pi radians
     // so that it is displayed correctly.
-    _hpText.angle = pi;
+    _hpText
+      ..angle = pi
 
-    // To place the text just behind the enemy.
-    _hpText.position = Vector2(50, 80);
+      // To place the text just behind the enemy.
+      ..position = Vector2(50, 80);
 
     // Add as child of current component.
     add(_hpText);
@@ -131,18 +134,24 @@ class Enemy extends SpriteComponent
   // This method will destory this enemy.
   void destroy() {
     // Ask audio player to play enemy destroy effect.
-    gameRef.addCommand(Command<AudioPlayerComponent>(action: (audioPlayer) {
-      audioPlayer.playSfx('laser1.ogg');
-    }));
+    gameRef.addCommand(
+      Command<AudioPlayerComponent>(
+        action: (audioPlayer) {
+          audioPlayer.playSfx('laser1.ogg');
+        },
+      ),
+    );
 
     removeFromParent();
 
     // Before dying, register a command to increase
     // player's score by 1.
-    final command = Command<Player>(action: (player) {
-      // Use the correct killPoint to increase player's score.
-      player.addToScore(enemyData.killPoint);
-    });
+    final command = Command<Player>(
+      action: (player) {
+        // Use the correct killPoint to increase player's score.
+        player.addToScore(enemyData.killPoint);
+      },
+    );
     gameRef.addCommand(command);
 
     // Generate 20 white circle particles with random speed and acceleration,
@@ -198,7 +207,8 @@ class Enemy extends SpriteComponent
   // Pauses enemy for 2 seconds when called.
   void freeze() {
     _speed = 0;
-    _freezeTimer.stop();
-    _freezeTimer.start();
+    _freezeTimer
+      ..stop()
+      ..start();
   }
 }
