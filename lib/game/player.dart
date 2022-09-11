@@ -4,8 +4,9 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/input.dart';
 import 'package:flame/particles.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Draggable;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -24,13 +25,13 @@ class Player extends SpriteComponent
         KnowsGameSize,
         CollisionCallbacks,
         HasGameRef<SpacescapeGame>,
-        KeyboardHandler {
-  // Player joystick
-  JoystickComponent joystick;
-
+        KeyboardHandler,
+        Draggable {
   // Player health.
   int _health = 100;
   int get health => _health;
+
+  Vector2? dragDeltaPosition;
 
   // Details of current spaceship.
   Spaceship _spaceship;
@@ -60,7 +61,6 @@ class Player extends SpriteComponent
   }
 
   Player({
-    required this.joystick,
     required this.spaceshipType,
     Sprite? sprite,
     Vector2? position,
@@ -160,17 +160,17 @@ class Player extends SpriteComponent
 
     _powerUpTimer.update(dt);
 
-    // Increment the current position of player by (speed * delta time) along moveDirection.
-    // Delta time is the time elapsed since last update. For devices with higher frame rates, delta time
-    // will be smaller and for devices with lower frame rates, it will be larger. Multiplying speed with
-    // delta time ensure that player speed remains same irrespective of the device FPS.
-    if (!joystick.delta.isZero()) {
-      position.add(joystick.relativeDelta * _spaceship.speed * dt);
-    }
-
-    if (!keyboardDelta.isZero()) {
-      position.add(keyboardDelta * _spaceship.speed * dt);
-    }
+    // // Increment the current position of player by (speed * delta time) along moveDirection.
+    // // Delta time is the time elapsed since last update. For devices with higher frame rates, delta time
+    // // will be smaller and for devices with lower frame rates, it will be larger. Multiplying speed with
+    // // delta time ensure that player speed remains same irrespective of the device FPS.
+    // if (!joystick.delta.isZero()) {
+    //   position.add(joystick.relativeDelta * _spaceship.speed * dt);
+    // }
+    //
+    // if (!keyboardDelta.isZero()) {
+    //   position.add(keyboardDelta * _spaceship.speed * dt);
+    // }
 
     // Clamp position of player such that the player sprite does not go outside the screen size.
     position.clamp(
@@ -257,6 +257,38 @@ class Player extends SpriteComponent
     if (_health > 100) {
       _health = 100;
     }
+  }
+
+  @override
+  bool handleDragStart(int pointerId, DragStartInfo info) {
+    dragDeltaPosition = info.eventPosition.game - position;
+    return false;
+  }
+
+  @override
+  bool handleDragUpdated(int pointerId, DragUpdateInfo info) {
+    if (parent is! SpacescapeGame) {
+      return true;
+    }
+    final dragDeltaPosition = this.dragDeltaPosition;
+    if (dragDeltaPosition == null) {
+      return false;
+    }
+
+    position.setFrom(info.eventPosition.game - dragDeltaPosition);
+    return false;
+  }
+
+  @override
+  bool handleDragEnded(int pointerId, DragEndInfo info) {
+    dragDeltaPosition = null;
+    return false;
+  }
+
+  @override
+  bool handleDragCanceled(int pointerId) {
+    dragDeltaPosition = null;
+    return false;
   }
 
   // Resets player score, health and position. Should be called

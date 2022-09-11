@@ -93,17 +93,17 @@ class SpacescapeGame extends FlameGame
       );
 
       // Create a basic joystick component on left.
-      final joystick = JoystickComponent(
-        anchor: Anchor.bottomLeft,
-        position: Vector2(30, size.y - 30),
-        // size: 100,
-        background: CircleComponent(
-          radius: 60,
-          paint: Paint()..color = Colors.white.withOpacity(0.5),
-        ),
-        knob: CircleComponent(radius: 30),
-      );
-      add(joystick);
+      // final joystick = JoystickComponent(
+      //   anchor: Anchor.bottomLeft,
+      //   position: Vector2(30, size.y - 30),
+      //   // size: 100,
+      //   background: CircleComponent(
+      //     radius: 60,
+      //     paint: Paint()..color = Colors.white.withOpacity(0.5),
+      //   ),
+      //   knob: CircleComponent(radius: 30),
+      // );
+      // add(joystick);
 
       /// As build context is not valid in onLoad() method, we
       /// cannot get current [PlayerData] here. So initilize player
@@ -112,7 +112,6 @@ class SpacescapeGame extends FlameGame
       final spaceship = Spaceship.getSpaceshipByType(spaceshipType);
 
       _player = Player(
-        joystick: joystick,
         spaceshipType: spaceshipType,
         sprite: spriteSheet.getSpriteById(spaceship.spriteId),
         size: Vector2(64, 64),
